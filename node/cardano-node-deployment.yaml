@@ -31,11 +31,6 @@ spec:
             - name: node-ipc
               mountPath: /ipc
 #      restartPolicy:
-      tolerations:
-        - key: "8gb"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
       volumes:
         - name: node-db
           persistentVolumeClaim:
@@ -43,6 +38,11 @@ spec:
         - name: node-ipc
           persistentVolumeClaim:
             claimName: node-ipc
+      tolerations:
+        - key: "8gb"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
 
 ---
 apiVersion: v1
