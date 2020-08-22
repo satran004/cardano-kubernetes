@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: cardano-node-dbsync
+  name: cardano-node-dbsync
+spec:
+  serviceName: cardano-node-dbsync
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cardano-node-dbsync
+  template:
+    metadata:
+      labels:
+        app: cardano-node-dbsync
+    spec:
+      containers:
+        - name: cardano-node
+          image: inputoutput/cardano-node:1.19.0
+          env:
+            - name: NETWORK
+              value: mainnet
+          ports:
+            - name: node-port
+              containerPort: 3001
+          volumeMounts:
+            - name: node-db
+              mountPath: /data
+              subPath: node-db
+            - name: node-ipc
+              mountPath: /ipc
+              subPath: node-ipc
+        - name: cardano-db-sync
+          image: inputoutput/cardano-db-sync:4.0.0
+          env:
+            - name: NETWORK
+              value: mainnet
+            - name: POSTGRES_HOST
+              value: postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: EXTENDED
+              value: "true"
+          volumeMounts:
+            - name: postgres-secret
+              mountPath: /run/secrets
+              readOnly: true
+            - name: node-ipc
+              mountPath: /node-ipc
+              subPath: node-ipc
+#      restartPolicy:
+      volumes:
+        - name: postgres-secret
+          secret:
+            secretName: postgres-secret
+            items:
+              - key: POSTGRES_DB
+                path: postgres_db
+              - key: POSTGRES_USER
+                path: postgres_user
+              - key: POSTGRES_PASSWORD
+                path: postgres_password
+        - name: node-db
+          persistentVolumeClaim:
+            claimName: dbsync-node-db
+        - name: node-ipc
+          persistentVolumeClaim:
+            claimName: dbsync-node-ipc
+      tolerations:
+        - key: "8gb"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cardano-node-dbsync
+  labels:
+    app: cardano-node-dbsync
+spec:
+  ports:
+    - port: 3001
+      name: cardano-node-dbsync
+  clusterIP: None
+  selector:
+    app: cardano-node-dbsync

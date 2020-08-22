@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: cardano-node
+  name: cardano-node
+spec:
+  serviceName: cardano-node
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cardano-node
+  template:
+    metadata:
+      labels:
+        app: cardano-node
+    spec:
+      containers:
+        - name: cardano-node
+          image: inputoutput/cardano-node:1.19.0
+          env:
+            - name: NETWORK
+              value: mainnet
+          ports:
+            - name: node-port
+              containerPort: 3001
+          volumeMounts:
+            - name: node-db
+              mountPath: /data
+            - name: node-ipc
+              mountPath: /ipc
+#      restartPolicy:
+      tolerations:
+        - key: "8gb"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      volumes:
+        - name: node-db
+          persistentVolumeClaim:
+            claimName: node-db
+        - name: node-ipc
+          persistentVolumeClaim:
+            claimName: node-ipc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cardano-node
+  labels:
+    app: cardano-node
+spec:
+  ports:
+    - port: 3001
+      name: cardano-node
+  clusterIP: None
+  selector:
+    app: cardano-node
