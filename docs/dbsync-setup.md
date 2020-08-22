@@ -4,6 +4,8 @@ Cardano-DB Sync Server Installation
 **Pre-requisites**
 - [Install Postgress DB](postgres-setup.md)
 
+
+
 1. Go to **dbsync-with-node** folder
 
 2. Create PersistentVolumeClaim (PVC)
