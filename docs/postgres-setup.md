@@ -1,9 +1,12 @@
-###Install Postgres
-If you plan to use Cardano DB-sync server, you need a Postgres DB installation. Cardano DB Sync server fetches the data
-from a local Cardano node and populates tables in a Postgres db. These tables can be queried by other components
+Install Postgres (Required for DB Sync server)
+---------------
+
+If you plan to use Cardano DB-sync server, you need a Postgres DB installation. 
+
+Cardano DB Sync server fetches the data from a local Cardano node and populates tables in a Postgres db. These tables can be queried by other components
 to provide different Apis (GraphQL, REST).
 
-This section explains the steps required to install a Postgres DB in Kubernetes cluster.
+This section explains the steps required to install a Postgres DB in a Kubernetes cluster.
 
 1. Go to **postgres** folder
 
