@@ -1,9 +1,11 @@
-###Cardano-kubernetes
+Cardano-kubernetes
+--------------------
 
 This repo contains some Cardano specific kubernetes yaml files. These files can be used to run a Cardano node , DB Sync
 in a kubernetes cluster.
 
-Pre-requisites:
+**Pre-requisites:**
+
 - Kubernetes cluster
 
 
