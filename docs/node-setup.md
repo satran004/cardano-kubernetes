@@ -8,8 +8,8 @@ of the node container.
 
 To create the required volume claims, you can use node-pvc.yaml. 
 
-** As I am using DigitalOcean for my testing, I have included the default storageClassName setting available for
-DigitalOcean. If you are using a different cloud provider, you need to change this value accordingly.
+**As I am using DigitalOcean for my testing, I have included the default storageClassName setting available for
+DigitalOcean. If you are using a different cloud provider, you need to change this value accordingly.**
 
 ```$xslt
 storageClassName: do-block-storage
