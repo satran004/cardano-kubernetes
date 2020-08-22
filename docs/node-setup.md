@@ -1,23 +1,31 @@
-###Run a Cardano node in a Kubernetes Cluster
+Run a Cardano node in a Kubernetes Cluster
+----------------------------
+
 If you want a quicker way to deploy a Cardano node in a K8s cluster, then follow the below steps.
 
 1. You need to first create a "PersistentVolumeClaim". The blockchain data will be stored on that storage instead
 of the node container.
+
 To create the required volume claims, you can use node-pvc.yaml. 
+
 ** As I am using DigitalOcean for my testing, I have included the default storageClassName setting available for
 DigitalOcean. If you are using a different cloud provider, you need to change this value accordingly.
+
 ```$xslt
 storageClassName: do-block-storage
 ```
 To create the persistent volume claims,
 1. Go to the node folder
+
 2. Create required pvc using node-pvc.yaml
+
 ```$xslt
 $> kubectl create -f node-pvc.yaml 
 ```
 Now you should see the similar output.
 
 Output: 
+
 ```$xslt
 persistentvolumeclaim/node-db created
 persistentvolumeclaim/node-ipc created
@@ -29,7 +37,9 @@ $>kubectl get pvc
 ```
 
 3. Create a Pod for Cardano node
+
 Run the following command to create a StatefulSet deployment for the cardano node.
+
 ```
 $ kubectl create -f cardano-node-deployment.yaml
 ```
@@ -41,8 +51,10 @@ statefulset.apps/cardano-node created
 service/cardano-node created
 ```
 
-If everything is ok, your cardano node should start fetching blocks from the network.   
+If everything is ok, your cardano node should start fetching blocks from the network. 
+
 To make sure, your node is working as expected, you can check the node's log
+
 ```   
 $ kubectl logs -f cardano-node-0
 ```
