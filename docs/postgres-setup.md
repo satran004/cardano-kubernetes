@@ -49,7 +49,7 @@ $ kubectl get pvc
 Exptect Output: (Similar)
 ```
 NAME           STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS       AGE
-postgres-pvc   Bound    pvc-132e770c-e429-11ea-935a-aae64714ca70   60Gi       RWO            do-block-storage   7s
+postgres-pvc   Bound    pvc-132e770c-34343434343434243434324422424  60Gi       RWO            do-block-storage   7s
 ```
 
 3. Create and run postgres as a StatefulSet.
