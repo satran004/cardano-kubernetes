@@ -1,4 +1,5 @@
-###Cardano-DB Sync Server Installation
+Cardano-DB Sync Server Installation
+-----------------------
 
 1. Go to **dbsync-with-node** folder
 
