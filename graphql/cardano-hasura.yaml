@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hasura
+  name: hasura
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hasura
+  template:
+    metadata:
+      labels:
+        app: hasura
+    spec:
+      containers:
+        - image: inputoutput/cardano-graphql-hasura:2.0.0
+          imagePullPolicy: Always
+          name: hasura
+          env:
+            - name: POSTGRES_HOST
+              value: postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB_FILE
+              value: /run/secrets/postgres_db
+            - name: POSTGRES_PASSWORD_FILE
+              value: /run/secrets/postgres_password
+            - name: POSTGRES_USER_FILE
+              value: /run/secrets/postgres_user
+            - name: HASURA_GRAPHQL_ENABLE_CONSOLE
+              value: "true"
+            - name: HASURA_GRAPHQL_ENABLED_LOG_TYPES
+              value: "startup, http-log, webhook-log, websocket-log, query-log"
+            - name: HASURA_GRAPHQL_ENABLE_TELEMETRY
+              value: "false"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: postgres-secret
+              mountPath: /run/secrets
+              readOnly: true
+      volumes:
+        - name: postgres-secret
+          secret:
+            secretName: postgres-secret
+            items:
+              - key: POSTGRES_DB
+                path: postgres_db
+              - key: POSTGRES_USER
+                path: postgres_user
+              - key: POSTGRES_PASSWORD
+                path: postgres_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hasura
+  name: hasura
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: hasura
+  type: ClusterIP

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cardano-graphql
+  name: cardano-graphql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cardano-graphql
+  template:
+    metadata:
+      labels:
+        app: cardano-graphql
+    spec:
+      containers:
+        - image: inputoutput/cardano-graphql:2.0.0
+#          imagePullPolicy: Always
+          name: cardano-graphql
+          env:
+            - name: ALLOW_INTROSPECTION
+              value: "true"
+            - name: CACHE_ENABLED
+              value: "true"
+#            - name: GENESIS_FILE_BYRON
+#              value: /genesis/byron.json
+#            - name: GENESIS_FILE_SHELLEY
+#              value: /genesis/shelley.json
+            - name: HASURA_URI
+              value: http://hasura:80
+#            - name: POSTGRES_HOST
+#              value: postgres
+#            - name: POSTGRES_PORT
+#              value: "5432"
+#            - name: POSTGRES_DB_FILE
+#              value: /run/secrets/postgres_db
+#            - name: POSTGRES_PASSWORD_FILE
+#              value: /run/secrets/postgres_password
+#            - name: POSTGRES_USER_FILE
+#              value: /run/secrets/postgres_user
+          ports:
+            - name: api-port
+              containerPort: 3100
+              protocol: TCP
+#          volumeMounts:
+#            - name: postgres-secret
+#              mountPath: /run/secrets
+#              readOnly: true
+#      volumes:
+#        - name: postgres-secret
+#          secret:
+#            secretName: postgres-secret
+#            items:
+#              - key: POSTGRES_DB
+#                path: postgres_db
+#              - key: POSTGRES_USER
+#                path: postgres_user
+#              - key: POSTGRES_PASSWORD
+#                path: postgres_password
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cardano-graphql
+  name: cardano-graphql
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3100
+  selector:
+    app: cardano-graphql
+  type: ClusterIP
