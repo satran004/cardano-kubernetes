@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cardano-graphql
+  name: cardano-graphql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cardano-graphql
+  template:
+    metadata:
+      labels:
+        app: cardano-graphql
+    spec:
+      containers:
+        - image: inputoutput/cardano-graphql:2.0.0
+          imagePullPolicy: IfNotPresent
+          name: cardano-graphql
+          env:
+            - name: HASURA_URI
+              value: http://hasura:80
+          ports:
+            - containerPort: 3100
+              protocol: TCP
+          resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cardano-graphql
+  name: cardano-graphql
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3100
+  selector:
+    app: cardano-graphql
+  type: ClusterIP
