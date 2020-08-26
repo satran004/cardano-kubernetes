@@ -11,11 +11,13 @@ in a kubernetes cluster.
 
 Currently, you can use these yaml files to do the followings in a Kubernete cluster.
 
-1. Start a single node Cardano server
+**Steps**
+
+***1. Start a single node Cardano server***
   
   Check [here](docs/node-setup.md) to install a standalone Cardano node.
    
-2. Start DB Sync server. This setup includes three components
+***2. Start DB Sync server. This setup includes three components***
 
     - A postgres database - To store blockchain data in Postgres db.
     
