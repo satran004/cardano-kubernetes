@@ -9,9 +9,8 @@ in a kubernetes cluster.
 - Kubernetes cluster
 
 
-Currently, you can use these yaml files to do the followings in a Kubernete cluster.
 
-**Steps**
+Currently, you can use these yaml files to do the followings in a Kubernete cluster.
 
 **1. Start a single node Cardano server**
   
