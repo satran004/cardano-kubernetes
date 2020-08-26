@@ -29,3 +29,9 @@ Currently, you can use these yaml files to do the followings in a Kubernete clus
     Check [here](docs/dbsync-setup.md) to install a DB Sync server with Cardano node.
     
   
+TODO :
+
+- Cardano GraphQL k8s deployment script
+- Enable configuration options in cardano node deployment
+- K8s deployment files for a 3 nodes (1 BP + 2 relay) stake pool setup
+- Helm chart
